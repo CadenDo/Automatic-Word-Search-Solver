@@ -4,9 +4,9 @@
 #include <unordered_set>
 
 using namespace std;
-
 const int ArraySize = 8; // The # indicates how big the SQUARE array is
-int CorrectWords;
+int TotalFoundWords = 0;
+
 
 // Function 1 - Opens and read file (gives error if file isn't found)
 bool readInputFile(const string& filename, char table[ArraySize][ArraySize]) {
@@ -55,7 +55,7 @@ void printTable(const char table[ArraySize][ArraySize]) {
 }
 
 // Function 3 - Word Searching (8 directions)
-bool WordSearch(const char table[ArraySize][ArraySize], const string& word, int CorrectWords) {
+bool WordSearch(const char table[ArraySize][ArraySize], const string& word, int& FoundWords) {
     // X = rows
     // Y = Columns 
     // +1 is down/right, -1 is up/left
@@ -76,7 +76,7 @@ bool WordSearch(const char table[ArraySize][ArraySize], const string& word, int 
                 if (WordFoundNormHoriz) {
                     string HorzDirectionStr = (HorzDirection == 1) ? "left" : "right";
                     cout << word << " was found horizontally " << HorzDirectionStr << " at row " << x << " and column " << y << endl;
-                    CorrectWords++;
+                    FoundWords++;
                     return true;
                 }
             }
@@ -96,7 +96,7 @@ bool WordSearch(const char table[ArraySize][ArraySize], const string& word, int 
                 if (WordFoundVert) {
                     string VertDirectionStr = (VertDirection == 1) ? "right" : "left";
                     cout << word << " was found vertically " << VertDirectionStr << " at row " << x << " and column " << y << endl;
-                    CorrectWords++;
+                    FoundWords++;
                     return true;
                 }
             }
@@ -121,8 +121,9 @@ bool WordSearch(const char table[ArraySize][ArraySize], const string& word, int 
                 if (WordFoundDiag) {
                     string DiagDirectionStr = (DiagDirection == 0 ? "down-right" : (DiagDirection == 1 ? "down-left" : (DiagDirection == 2 ? "up-left" : "up-right")));
                     cout << word << " was found diagonally " << DiagDirectionStr << " at row " << x << " and column " << y << endl;
-                    CorrectWords++;
+                    FoundWords++;
                     return true;
+                    break;
                 }
             }
         }
@@ -134,7 +135,6 @@ int main() {
     char table[ArraySize][ArraySize];
     vector<string> ArrayedWords; // Replace static array with dynamic list
     int TotalWords = 0;
-
 
     // Finds and reads file. If not found, it gives error
     if (!readInputFile("Input File.txt", table)) {
@@ -149,17 +149,14 @@ int main() {
     printTable(table);
     cout << endl;
 
-    cout << "Found Words" << endl;
-
     // Searching Word + Output 
+    cout << "Found Words" << endl;
     for (const string& word : ArrayedWords) {
-
-        WordSearch(table, word, CorrectWords);
+        WordSearch(table, word, TotalFoundWords);
         TotalWords++;
     }
 
-    //cout << endl << "Total Words: " << TotalWords << endl;
-    //cout << "Correct Words: " << CorrectWords << endl; // Fix Later
+    cout << "Found Words: " << TotalFoundWords << endl; 
 
     return 0;
 }
