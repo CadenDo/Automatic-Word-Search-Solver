@@ -1,5 +1,6 @@
-This is a program I started during the Winter of 2024 at Washtenaw Community College, and I am continuing to improve it as I gain more experience in C++.
+This is a program I started in the Winter of 2024 at Washtenaw Community College and didn't open up a Github account until now. I am continuing to improve this project as I gain more experience in C++ and will add to the code periodically when time allows to do so. 
 
+Explanation of what is happening: 
 My program currently uses a text file of English words (provided by https://github.com/dwyl/english-words) as the source of the correctly spelled words. Before starting the program, an input file, which contains the crossword puzzle, must be defined in the code for the program to run. The program will then read both the input and the English word text file (words.txt) and print the table into the terminal. 
 
 Initially, the content of words.txt will be randomly read and assigned a random position in the hash table (unordered_set). Then, it's converted into a string vector for comparing words in the input file table. 
