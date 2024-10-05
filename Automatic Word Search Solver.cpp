@@ -67,10 +67,10 @@ bool WordSearch(const char table[ArraySize][ArraySize], const string& word, int&
         // 1 is top right to bottom left (diagonal down-left)
         // 2 is bottom right to top left (diagonal up-left)
         // 3 is bottom left to top right (diagonal up-right)
-        // 4 is horizontal left to right
-        // 5 is horizontal right to left
-        // 6 is vertical top to bottom
-        // 7 is vertical bottom to top
+        // 4 is left to right
+        // 5 is right to left
+        // 6 is top to bottom
+        // 7 is bottom to top
         
         bool WordFoundDiag = true;
 
