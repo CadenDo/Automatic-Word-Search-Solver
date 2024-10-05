@@ -61,8 +61,6 @@ bool WordSearch(const char table[ArraySize][ArraySize], const string& word, int&
     // +1 is down/right, -1 is up/left
 
     for (int x = 0; x < ArraySize; x++) {
-
-        // Diagonal Search (4 directions)
         for (int y = 0; y < ArraySize; y++) {
     for (int DiagDirection = 0; DiagDirection < 8; DiagDirection++) {
         // 0 is top left to bottom right (diagonal down-right)
