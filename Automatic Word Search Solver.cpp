@@ -4,8 +4,6 @@
 #include <unordered_set>
 
 using namespace std;
-const int ArraySize = 8; // The # indicates how big the SQUARE array is
-int TotalFoundWords = 0;
 
 
 // Function 1 - Opens and read file (gives error if file isn't found)
@@ -56,55 +54,82 @@ void printTable(const char table[ArraySize][ArraySize]) {
 
 // Function 3 - Word Searching (8 directions)
 bool WordSearch(const char table[ArraySize][ArraySize], const string& word, int& FoundWords) {
-    // X = rows
-    // Y = Columns 
-    // +1 is down/right, -1 is up/left
 
-    for (int x = 0; x < ArraySize; x++) {
-        for (int y = 0; y < ArraySize; y++) {
-    for (int DiagDirection = 0; DiagDirection < 8; DiagDirection++) {
-        // 0 is top left to bottom right (diagonal down-right)
-        // 1 is top right to bottom left (diagonal down-left)
-        // 2 is bottom right to top left (diagonal up-left)
-        // 3 is bottom left to top right (diagonal up-right)
-        // 4 is left to right
-        // 5 is right to left
-        // 6 is top to bottom
-        // 7 is bottom to top
+    for (int n = 0; n < ArraySize; n++) {
+        for (int m = 0; m < ArraySize; m++) {
+            for (int DiagDirection = 0; DiagDirection < 8; DiagDirection++) {
+                /* 0 is top left to bottom right (diagonal down-right)
+                   1 is top right to bottom left (diagonal down-left)
+                   2 is bottom right to top left (diagonal up-left)
+                   3 is bottom left to top right (diagonal up-right)
+                   4 is left to right
+                   5 is right to left
+                   6 is top to bottom
+                   7 is bottom to top  */
+                bool WordFoundDiag = true;
         
-        bool WordFoundDiag = true;
-
-        for (int i = 0; i < word.size(); i++) {
-            int DiagRow = x + i * ((DiagDirection == 0 || DiagDirection == 1 || DiagDirection == 6) ? 1 : (DiagDirection == 2 || DiagDirection == 3 || DiagDirection == 7) ? -1 : 0);
-            int DiagCol = y + i * ((DiagDirection == 0 || DiagDirection == 3 || DiagDirection == 4) ? 1 :  (DiagDirection == 1 || DiagDirection == 2 || DiagDirection == 5) ? -1 : 0);
-            if (DiagCol < 0 || DiagRow < 0 || DiagCol >= ArraySize || DiagRow >= ArraySize || table[DiagRow][DiagCol] != word[i]) {
-                WordFoundDiag = false;
-                break;
+                for (int i = 0; i < word.size(); i++) {
+                    int DiagRow;
+                    if (DiagDirection == 0 || DiagDirection == 1 || DiagDirection == 6) {
+                        DiagRow = n + i;
+                    } else if (DiagDirection == 2 || DiagDirection == 3 || DiagDirection == 7) {
+                        DiagRow = n - i;
+                    } else {
+                        DiagRow = n;
+                    }
+                
+                    int DiagCol;
+                    if (DiagDirection == 0 || DiagDirection == 3 || DiagDirection == 4) {
+                        DiagCol = m + i;
+                    } else if (DiagDirection == 1 || DiagDirection == 2 || DiagDirection == 5) {
+                        DiagCol = m - i;
+                    } else {
+                        DiagCol = m;
+                    }
+                
+                    if (DiagCol < 0 || DiagRow < 0 || DiagCol >= ArraySize || DiagRow >= ArraySize || table[DiagRow][DiagCol] != word[i]) {
+                        WordFoundDiag = false;
+                        break;
+                    }
+                }
+                
+                if (WordFoundDiag) {
+                    string DiagDirectionStr;
+                    if (DiagDirection == 0) {
+                        DiagDirectionStr = "down-right";
+                    } else if (DiagDirection == 1) {
+                        DiagDirectionStr = "down-left";
+                    } else if (DiagDirection == 2) {
+                        DiagDirectionStr = "up-left";
+                    } else if (DiagDirection == 3) {
+                        DiagDirectionStr = "up-right";
+                    } else if (DiagDirection == 4) {
+                        DiagDirectionStr = "right";
+                    } else if (DiagDirection == 5) {
+                        DiagDirectionStr = "left";
+                    } else if (DiagDirection == 6) {
+                        DiagDirectionStr = "down";
+                    } else if (DiagDirection == 7) {
+                        DiagDirectionStr = "up";
+                    } else {
+                        DiagDirectionStr = "unknown";
+                    }
+                
+                    cout << word << " was found " << DiagDirectionStr << " at row " << n << " and column " << m << endl;
+                    FoundWords++;
+                    return true;
+                }
             }
         }
-        if (WordFoundDiag) {
-            string DiagDirectionStr = (DiagDirection == 0 ? "down-right" : 
-                                       DiagDirection == 1 ? "down-left" : 
-                                       DiagDirection == 2 ? "up-left" : 
-                                       DiagDirection == 3 ? "up-right" : 
-                                       DiagDirection == 4 ? "right" : 
-                                       DiagDirection == 5 ? "left" : 
-                                       DiagDirection == 6 ? "down" :
-                                       DiagDirection == 7 ? "up" : "unknown");
-
-            cout << word << " was found " << DiagDirectionStr << " at row " << x << " and column " << y << endl;
-            FoundWords++;
-            return true;
-        }
-    }
-}
     }
     return false;
 }
 
 int main() {
+    const int ArraySize = 8; // The # indicates how big the SQUARE array 
+    int TotalFoundWords = 0;
     char table[ArraySize][ArraySize];
-    vector<string> ArrayedWords; // Replace static array with dynamic list
+    vector<string> ArrayedWords;
     int TotalWords = 0;
 
     // Finds and reads file. If not found, it gives error
@@ -113,7 +138,7 @@ int main() {
     }
 
     // Read words from words.txt
-    unordered_set<string> dictionary = readDictionary("words.txt");
+    unordered_set<string> dictionary = readDictionary("words.txt"); // Initial file reading, removes duplicates, increase reading speed (sources online)
     ArrayedWords.assign(dictionary.begin(), dictionary.end()); // Convert set to vector
 
     // Printing Table
